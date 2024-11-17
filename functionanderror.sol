@@ -1,31 +1,31 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract SimpleSmartContract {
+contract CounterContract {
+    int256 public counter; // Counter value
 
-    uint256 public balance;
-
-    
-    function deposit(uint256 amount) public {
-        
-        require(amount > 0, "Amount must be greater than 0");
-        
-        balance += amount;
+    /// Increment the counter
+    function increment() public {
+        require(counter < type(int256).max, "Counter overflow");
+        counter++;
+        assert(counter > 0); // Ensure the counter value is positive
     }
 
-    
-    function withdraw(uint256 amount) public {
-        
-        require(balance >= amount, "Insufficient balance");
-
-       
-        uint256 previousBalance = balance;
-        balance -= amount;
-        assert(balance == previousBalance - amount);
+    /// Decrement the counter
+    function decrement() public {
+        require(counter > type(int256).min, "Counter underflow");
+        counter--;
+        assert(counter < 0 || counter == 0); // Ensure the counter does not exceed its bounds
     }
 
-    
+    /// Reset the counter to zero
+    function reset() public {
+        counter = 0;
+        assert(counter == 0); // Ensure counter is reset
+    }
+
+    /// Always revert function
     function alwaysRevert() public pure {
-        revert("This will always revert");
+        revert("This function always reverts");
     }
 }
